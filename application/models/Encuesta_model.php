@@ -115,7 +115,7 @@ class Encuesta_model extends CI_Model
     	$str_query = "SELECT x.*, m.municipio AS nom_municipio
 						FROM(
 						SELECT
-						en.id_aplica, ct.cct, ct.turno, ct.nombre_ct,
+						ct.id_cct, sr.fec_ultimoreg, en.id_aplica, ct.cct, ct.turno, ct.nombre_ct, 
 						MAX(CASE WHEN p.id_pregunta = 18 THEN r.respuesta ELSE '' END) AS 'NOMBRE(S)',
 						MAX(CASE WHEN p.id_pregunta = 19 THEN r.respuesta ELSE '' END) AS 'PRIMER APELLIDO',
 						MAX(CASE WHEN p.id_pregunta = 20 THEN r.respuesta ELSE '' END) AS 'SEGUNDO APELLIDO',
@@ -130,6 +130,7 @@ class Encuesta_model extends CI_Model
 						INNER JOIN cct ct ON en.id_cct=ct.id_cct
 						INNER JOIN respuesta r ON en.id_aplica= r.id_aplica
 						INNER JOIN pregunta p ON r.id_pregunta = p.id_pregunta
+						LEFT JOIN sin_registro sr on en.id_cct = sr.id_cct
 						GROUP BY r.id_aplica
 						ORDER BY en.id_aplica, ct.cct, ct.id_turno) AS x
 						INNER JOIN municipio m ON x.MUNICIPIO=m.id_municipio";
